@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             x:Class="TravelGuideApp.Views.HistoryPage"
+             Title="Lịch sử">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="LogTemplate" x:DataType="viewmodels:UserPoiLogItem">
+            <Frame CornerRadius="12" Padding="12" Margin="0,0,0,12" BackgroundColor="White" BorderColor="#F3F4F6" HasShadow="False">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="{Binding PoiName}" FontAttributes="Bold" FontSize="16" TextColor="#111827"/>
+                    <Label Text="{Binding TriggerType, StringFormat='Nguồn: {0}'}" FontSize="12" TextColor="#6B7280"/>
+                    <Label Text="{Binding Time, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="12" TextColor="#6B7280"/>
+                </VerticalStackLayout>
+            </Frame>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Grid Padding="20">
+        <CollectionView ItemsSource="{Binding Items}" ItemTemplate="{StaticResource LogTemplate}" />
+    </Grid>
+</ContentPage>

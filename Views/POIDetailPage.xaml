@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="TravelGuideApp.Views.POIDetailPage"
+             BackgroundColor="#FFFFFF"
+             Shell.NavBarIsVisible="False"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="300, *">
+        <!-- Top Image Area -->
+        <Grid Grid.Row="0">
+            <Image Source="poi_hero_placeholder.jpg" Aspect="AspectFill" />
+            <BoxView Color="#40000000" VerticalOptions="Fill" HorizontalOptions="Fill" />
+            
+            <!-- Controls Overlay -->
+            <VerticalStackLayout Margin="20,40,20,20" VerticalOptions="FillAndExpand">
+                <Grid ColumnDefinitions="Auto, *, Auto" VerticalOptions="Start">
+                    <!-- Back Button -->
+                    <Frame HeightRequest="40" WidthRequest="40" CornerRadius="20" BackgroundColor="#80000000" Padding="0" HasShadow="False" Grid.Column="0">
+                        <Label Text="&lt;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                    
+                    <!-- Favorite Button -->
+                    <Frame HeightRequest="40" WidthRequest="40" CornerRadius="20" BackgroundColor="#FFFFFF" Padding="0" HasShadow="True" Grid.Column="2">
+                        <Label Text="❤" TextColor="#D1D5DB" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                </Grid>
+                
+                <!-- Title over image at the bottom -->
+                <VerticalStackLayout VerticalOptions="EndAndExpand" Spacing="5">
+                    <Label Text="{Binding Item.Name}" FontSize="28" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Việt Nam" FontSize="14" TextColor="#E5E7EB" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1" Margin="0,-20,0,0">
+            <Frame HasShadow="False" CornerRadius="20" BackgroundColor="White" Padding="20">
+                <VerticalStackLayout Spacing="20">
+                    
+                    <!-- Buttons Tabs -->
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <Button Text="{Binding IsFavorite, Converter={StaticResource FavoriteTextConverter}}"
+                                BackgroundColor="#EFF6FF"
+                                TextColor="#1D4ED8"
+                                CornerRadius="25"
+                                FontAttributes="Bold"
+                                Grid.Column="0"
+                                Command="{Binding ToggleFavoriteCommand}"/>
+                        <Button Text="Chỉ đường" BackgroundColor="#1D4ED8" TextColor="White" CornerRadius="25" FontAttributes="Bold" Grid.Column="1"
+                                Command="{Binding OpenDirectionsCommand}"/>
+                    </Grid>
+                    <Button Text="Tải offline"
+                            Command="{Binding DownloadOfflineCommand}"
+                            BackgroundColor="#EFF6FF"
+                            TextColor="#1D4ED8"
+                            CornerRadius="25"
+                            FontAttributes="Bold"
+                            HeightRequest="44"/>
+                    
+                    <!-- Image Gallery -->
+                    <Label Text="Hình ảnh" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
+                    <Frame HasShadow="False" CornerRadius="16" Padding="0" BackgroundColor="#F3F4F6" BorderColor="#E5E7EB" HeightRequest="200">
+                        <Grid>
+                            <CarouselView ItemsSource="{Binding Images}" IsVisible="{Binding HasImages}" HeightRequest="200">
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
+                            <Label Text="Chưa có ảnh cho điểm đến này"
+                                   IsVisible="{Binding HasImages, Converter={StaticResource InverseBoolConverter}}"
+                                   TextColor="#6B7280"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Details Title -->
+                    <Label Text="Giới thiệu" FontSize="20" FontAttributes="Bold" TextColor="#111827" />
+                    <Label Text="{Binding LocalizedDescription}" FontSize="14" TextColor="#4B5563" LineHeight="1.5" />
+
+                    <!-- Map Preview -->
+                    <Label Text="Bản đồ" FontSize="18" FontAttributes="Bold" TextColor="#111827" />
+                    <Frame HasShadow="False" CornerRadius="16" Padding="0" BackgroundColor="#F3F4F6" BorderColor="#E5E7EB" HeightRequest="220">
+                        <maps:Map x:Name="PoiMap" IsShowingUser="False" />
+                    </Frame>
+                    
+                    <!-- Info List -->
+                    <Frame HasShadow="False" BackgroundColor="#F9FAFB" CornerRadius="15" Padding="15">
+                        <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="40, *, Auto" RowSpacing="15">
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="15" BackgroundColor="#E5E7EB" HasShadow="False" Padding="0" Grid.Row="0" Grid.Column="0">
+                                <Label Text="📍" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Frame>
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" VerticalOptions="Center">
+                                <Label Text="Bán kính kích hoạt" FontSize="14" FontAttributes="Bold" TextColor="#111827"/>
+                                <Label Text="{Binding Item.Radius, StringFormat='{0} mét'}" FontSize="12" TextColor="#6B7280"/>
+                            </VerticalStackLayout>
+                            <Label Text="›" FontSize="20" TextColor="#D1D5DB" Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
+                            
+                            <Frame HeightRequest="30" WidthRequest="30" CornerRadius="15" BackgroundColor="#E5E7EB" HasShadow="False" Padding="0" Grid.Row="1" Grid.Column="0">
+                                <Label Text="⭐" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Frame>
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" VerticalOptions="Center">
+                                <Label Text="Độ ưu tiên" FontSize="14" FontAttributes="Bold" TextColor="#111827"/>
+                                <Label Text="{Binding Item.Priority, StringFormat='Mức {0}'}" FontSize="12" TextColor="#6B7280"/>
+                            </VerticalStackLayout>
+                            <Label Text="›" FontSize="20" TextColor="#D1D5DB" Grid.Row="1" Grid.Column="2" VerticalOptions="Center"/>
+                        </Grid>
+                    </Frame>
+
+                    <Button Text="Nghe Thuyết Minh" 
+                            BackgroundColor="#1D4ED8" 
+                            TextColor="White" 
+                            FontAttributes="Bold"
+                            CornerRadius="25"
+                            HeightRequest="50"
+                            Margin="0,20,0,20"
+                            Command="{Binding PlayAudioCommand}"/>
+
+                    <Label Text="Đang phát thuyết minh..."
+                           IsVisible="{Binding HasAudio}"
+                           FontSize="12"
+                           TextColor="#6B7280"
+                           HorizontalOptions="Center" />
+                            
+                </VerticalStackLayout>
+            </Frame>
+        </ScrollView>
+        
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

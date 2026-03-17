@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelGuideApp.Views.LoginPage"
+             Title="Đăng Nhập">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30,50" VerticalOptions="Center">
+
+            <Image Source="dotnet_bot.png"
+                   HeightRequest="150"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Travel Guide"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+                   
+            <Label Text="Chào mừng bạn quay lại!"
+                   FontSize="16"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+
+            <Entry Placeholder="Tên đăng nhập"
+                   Text="{Binding Username}"
+                   ClearButtonVisibility="WhileEditing" />
+
+            <Entry Placeholder="Mật khẩu"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   ClearButtonVisibility="WhileEditing" />
+
+            <Button Text="Đăng Nhập"
+                    Command="{Binding LoginCommand}"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    CornerRadius="8"
+                    HeightRequest="50"/>
+
+            <Button Text="Đăng ký tài khoản mới"
+                    Command="{Binding RegisterCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

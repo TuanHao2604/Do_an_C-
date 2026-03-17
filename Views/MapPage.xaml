@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="TravelGuideApp.Views.MapPage"
+             Shell.NavBarIsVisible="False"
+             Title="Bản đồ">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <!-- Map Background -->
+        <maps:Map x:Name="PoiMap" Grid.RowSpan="3" IsShowingUser="True" />
+
+        <!-- Top Controls (Floating Search) -->
+        <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,40,20,10" Grid.Row="0">
+            <Frame HeightRequest="50" WidthRequest="50" CornerRadius="25" BackgroundColor="White" Padding="0" HasShadow="True" Grid.Column="0">
+                <Label Text="📍" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Frame>
+            
+            <Frame HeightRequest="50" WidthRequest="50" CornerRadius="25" BackgroundColor="White" Padding="0" HasShadow="True" Grid.Column="2">
+                <Label Text="🎯" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Frame>
+        </Grid>
+        
+        <VerticalStackLayout Grid.Row="1" VerticalOptions="End" HorizontalOptions="End" Padding="20">
+            <Frame HeightRequest="50" WidthRequest="50" CornerRadius="25" BackgroundColor="White" Padding="0" HasShadow="True" Margin="0,0,0,20">
+                <Label Text="◎" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Frame>
+        </VerticalStackLayout>
+
+        <!-- Bottom Sheet Over Map -->
+        <Frame Grid.Row="2" CornerRadius="30" Margin="0,0,0,-30" Padding="0,20,0,30" BackgroundColor="White" HasShadow="True">
+            <VerticalStackLayout Spacing="15" Padding="20,0">
+                <!-- Drag Handle -->
+                <BoxView HeightRequest="5" WidthRequest="50" CornerRadius="2" BackgroundColor="#E5E7EB" HorizontalOptions="Center" Margin="0,0,0,10"/>
+                
+                <!-- Place Summary Card -->
+                <Frame CornerRadius="20" BackgroundColor="#F9FAFB" HasShadow="False" Padding="15" BorderColor="#F3F4F6">
+                    <Grid ColumnDefinitions="60, *, 40">
+                        <Frame HeightRequest="60" WidthRequest="60" CornerRadius="15" Padding="0" Grid.Column="0" IsClippedToBounds="True">
+                            <Image Source="poi_placeholder.jpg" Aspect="AspectFill" />
+                        </Frame>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Margin="15,0,0,0" Spacing="0">
+                            <Label Text="Chùa Một Cột" FontAttributes="Bold" FontSize="18" TextColor="#111827"/>
+                            <Label Text="Ba Đình, Hà Nội" FontSize="12" TextColor="#6B7280"/>
+                        </VerticalStackLayout>
+                        
+                        <!-- Direction Arrow Button -->
+                        <Frame HeightRequest="40" WidthRequest="40" CornerRadius="20" BackgroundColor="White" BorderColor="#E5E7EB" Padding="0" Grid.Column="2" VerticalOptions="Center">
+                            <Label Text="➤" FontSize="16" TextColor="#3B82F6" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Frame>
+                    </Grid>
+                </Frame>
+                
+                <!-- Action Buttons -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="15" Margin="0,5">
+                    <Button Text="Lưu lại" BackgroundColor="#EFF6FF" TextColor="#1D4ED8" CornerRadius="25" FontAttributes="Bold" Grid.Column="0"/>
+                    <Button Text="Đến đây" BackgroundColor="#1D4ED8" TextColor="White" CornerRadius="25" FontAttributes="Bold" Grid.Column="1"/>
+                </Grid>
+
+                <!-- Nearby POIs -->
+                <VerticalStackLayout Spacing="12" Margin="0,15,0,0">
+                    <Label Text="Điểm lân cận" FontSize="16" FontAttributes="Bold" TextColor="#111827"/>
+                    <CollectionView ItemsSource="{Binding PointsOfInterest}"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedPoi, Mode=TwoWay}"
+                                    HeightRequest="200">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="50, *" Padding="5">
+                                    <Frame HeightRequest="40" WidthRequest="40" CornerRadius="12" Padding="0" Grid.Column="0" IsClippedToBounds="True">
+                                        <Image Source="poi_placeholder.jpg" Aspect="AspectFill" />
+                                    </Frame>
+                                    <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                                        <Label Text="{Binding Radius, StringFormat='Bán kính {0}m'}" FontSize="12" TextColor="#6B7280"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Quét Geofence test" Command="{Binding CheckGeofenceCommand}" BackgroundColor="Transparent" TextColor="Gray" FontSize="10" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Grid.RowSpan="3" HorizontalOptions="Center" VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

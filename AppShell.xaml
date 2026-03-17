@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TravelGuideApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TravelGuideApp"
+    xmlns:views="clr-namespace:TravelGuideApp.Views"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <Tab Title="Đăng nhập" Icon="dotnet_bot.png">
+            <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
+        </Tab>
+        <Tab Title="Khám phá" Icon="dotnet_bot.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage" />
+        </Tab>
+        <Tab Title="Bản đồ">
+            <ShellContent ContentTemplate="{DataTemplate views:MapPage}" Route="MapPage" />
+        </Tab>
+        <Tab Title="Lịch trình">
+            <ShellContent ContentTemplate="{DataTemplate views:ToursPage}" Route="ToursPage" />
+        </Tab>
+        <Tab Title="Trợ lý">
+            <ShellContent ContentTemplate="{DataTemplate views:QRScanPage}" Route="QRScanPage" />
+        </Tab>
+        <Tab Title="Yêu thích">
+            <ShellContent ContentTemplate="{DataTemplate views:FavoritesPage}" Route="FavoritesPage" />
+        </Tab>
+        <Tab Title="Lịch sử">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="HistoryPage" />
+        </Tab>
+        <Tab Title="Tài khoản">
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
+        </Tab>
+    </TabBar>
+
+</Shell>

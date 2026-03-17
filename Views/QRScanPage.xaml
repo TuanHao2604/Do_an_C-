@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+             x:Class="TravelGuideApp.Views.QRScanPage"
+             BackgroundColor="#1F2937"
+             Shell.NavBarIsVisible="False"
+             Title="Quét QR">
+
+    <Grid>
+        <zxing:CameraBarcodeReaderView x:Name="CameraView"
+                                       IsDetecting="True"
+                                       IsTorchOn="False"
+                                       BarcodesDetected="OnBarcodeDetected" />
+
+        <VerticalStackLayout Padding="20">
+            <!-- Header -->
+            <Grid ColumnDefinitions="50, *, 50" Margin="0,20,0,40">
+                <Label Text="&lt;" FontSize="24" TextColor="White" VerticalOptions="Center" Grid.Column="0" />
+                <Label Text="Quét QR Code" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" />
+                <Label Text="⚡" FontSize="24" TextColor="White" VerticalOptions="Center" HorizontalOptions="End" Grid.Column="2" />
+            </Grid>
+
+            <!-- Scanner Frame -->
+            <Frame BackgroundColor="Transparent"
+                   BorderColor="#10B981"
+                   CornerRadius="0"
+                   HeightRequest="250"
+                   WidthRequest="250"
+                   HorizontalOptions="Center"
+                   HasShadow="False"
+                   Padding="0"
+                   Margin="0,40,0,40">
+                <BoxView Color="#20FFFFFF" />
+            </Frame>
+
+            <Label Text="Quét để nghe thuyết minh về điểm đến này:" 
+                   TextColor="White" 
+                   FontSize="16" 
+                   HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center" 
+                   Margin="0,0,0,30" />
+
+            <Button Text="✨ Simulate Scan POI" 
+                    Command="{Binding SimulateScanCommand}" 
+                    BackgroundColor="#1D4ED8" 
+                    TextColor="White" 
+                    CornerRadius="25" 
+                    FontAttributes="Bold" 
+                    WidthRequest="250"
+                    HeightRequest="50"
+                    HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

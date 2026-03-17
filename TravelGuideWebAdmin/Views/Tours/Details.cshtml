@@ -1,0 +1,84 @@
+@using System.Linq
+@model TravelGuideWebAdmin.Models.Tour
+
+@{
+    ViewData["Title"] = "Chi tiết Tour";
+    var mappedIds = ViewBag.MappedPoiIds as List<int> ?? new List<int>();
+    var allPois = ViewBag.AllPois as List<TravelGuideWebAdmin.Models.POI> ?? new List<TravelGuideWebAdmin.Models.POI>();
+    var mappedPois = allPois.Where(p => mappedIds.Contains(p.Id)).ToList();
+    var availablePois = allPois.Where(p => !mappedIds.Contains(p.Id)).ToList();
+}
+
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Chi tiết hành trình</p>
+        <h1 class="page-title">@Model.Name</h1>
+        <p class="page-subtitle">@Model.Description</p>
+        <p class="page-subtitle">Thời gian ước tính: @Model.EstimatedTime</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-outline" asp-action="Edit" asp-route-id="@Model?.Id">Chỉnh sửa</a>
+        <a class="btn btn-outline" asp-action="Index">Quay lại</a>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="section-card">
+            <h3 class="mb-3">POI đã gán</h3>
+            @if (!mappedPois.Any())
+            {
+                <p class="text-muted">Chưa có POI nào được gán cho tour này.</p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var poi in mappedPois)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@poi.Name</strong>
+                                <div class="text-muted">@poi.Description</div>
+                            </div>
+                            <form asp-action="RemovePoi" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="tourId" value="@Model.Id" />
+                                <input type="hidden" name="poiId" value="@poi.Id" />
+                                <button class="btn btn-outline" type="submit">Gỡ</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="section-card">
+            <h3 class="mb-3">Thêm POI vào tour</h3>
+            @if (!availablePois.Any())
+            {
+                <p class="text-muted">Tất cả POI đã được gán.</p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var poi in availablePois)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@poi.Name</strong>
+                                <div class="text-muted">@poi.Description</div>
+                            </div>
+                            <form asp-action="AddPoi" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="tourId" value="@Model.Id" />
+                                <input type="hidden" name="poiId" value="@poi.Id" />
+                                <button class="btn btn-primary" type="submit">Thêm</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>

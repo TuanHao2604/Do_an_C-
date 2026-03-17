@@ -1,0 +1,48 @@
+@model TravelGuideWebAdmin.ViewModels.AdminLoginViewModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<section class="hero-grid">
+    <div class="hero-card">
+        <p class="eyebrow">TravelGuide Admin</p>
+        <h1 class="hero-title">Đăng nhập quản trị</h1>
+        <p class="hero-subtitle">Vui lòng đăng nhập để truy cập hệ thống quản trị nội dung.</p>
+        <div class="hero-actions">
+            <span class="badge-pill">Bảo mật cookie</span>
+            <span class="badge-pill">Phiên đăng nhập</span>
+        </div>
+    </div>
+
+    <div class="hero-panel">
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu</label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <div class="text-danger mb-2">
+                @Html.ValidationSummary()
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+    </div>
+</section>

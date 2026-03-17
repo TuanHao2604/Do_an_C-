@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             xmlns:models="clr-namespace:TravelGuideApp.Models"
+             x:Class="TravelGuideApp.Views.ToursPage"
+             BackgroundColor="#F5F6F8"
+             Title="Lịch trình">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Header & Search -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,20,20,0" Spacing="15">
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <Label Text="‹" FontSize="30" TextColor="#111827" VerticalOptions="Center" Grid.Column="0" />
+                <Label Text="Danh Sách Lịch Trình" FontSize="20" FontAttributes="Bold" TextColor="#111827" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" />
+                <Image Source="search_icon.png" WidthRequest="24" HeightRequest="24" Grid.Column="2" VerticalOptions="Center" />
+            </Grid>
+            
+            <Frame HasShadow="False" CornerRadius="25" Padding="15,5" BackgroundColor="White" BorderColor="#E5E7EB">
+                <Grid ColumnDefinitions="Auto, *">
+                    <Image Source="search_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                    <Entry Placeholder="Tìm kiếm lịch trình..." VerticalOptions="Center" Grid.Column="1" BackgroundColor="Transparent" TextColor="#374151" ClearButtonVisibility="WhileEditing"
+                           Text="{Binding SearchQuery}"/>
+                </Grid>
+            </Frame>
+            <Button Text="Đồng bộ dữ liệu"
+                    Command="{Binding SyncCommand}"
+                    BackgroundColor="#1D4ED8"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="40"/>
+        </VerticalStackLayout>
+
+        <!-- List -->
+        <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadToursCommand}" Grid.Row="1">
+            <CollectionView ItemsSource="{Binding FilteredTours}"
+                            Margin="20"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedTour, Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Tour">
+                        <Frame HasShadow="False" CornerRadius="16" Padding="15" Margin="0,0,0,15" BackgroundColor="White" BorderColor="#F3F4F6">
+                            <Grid ColumnDefinitions="100, *">
+                                <!-- Image -->
+                                <Frame CornerRadius="12" Padding="0" Grid.Column="0" IsClippedToBounds="True" HeightRequest="100" WidthRequest="100">
+                                    <Image Source="tour_placeholder.jpg" Aspect="AspectFill" />
+                                </Frame>
+                                
+                                <!-- Content -->
+                                <VerticalStackLayout Grid.Column="1" Margin="15,0,0,0" VerticalOptions="Center" Spacing="4">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" TextColor="#111827" />
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="#6B7280" MaxLines="2" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding EstimatedTime, StringFormat='Thời gian: {0}'}" FontSize="12" TextColor="#6B7280" Margin="0,0,0,5" />
+                                    
+                                    <!-- Tags -->
+                                    <HorizontalStackLayout Spacing="10">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <BoxView Color="#F59E0B" WidthRequest="6" HeightRequest="6" CornerRadius="3" VerticalOptions="Center"/>
+                                            <Label Text="Nổi bật" FontSize="11" TextColor="#4B5563"/>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout Spacing="4">
+                                            <BoxView Color="#3B82F6" WidthRequest="6" HeightRequest="6" CornerRadius="3" VerticalOptions="Center"/>
+                                            <Label Text="Tham quan" FontSize="11" TextColor="#4B5563"/>
+                                        </HorizontalStackLayout>
+                                    </HorizontalStackLayout>
+                                    
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

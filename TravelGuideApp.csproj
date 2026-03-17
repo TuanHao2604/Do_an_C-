@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+<TargetFrameworks>net8.0-android</TargetFrameworks>
+<OutputType>Exe</OutputType>
+<UseAppHost>false</UseAppHost>
+<GenerateAppHost>false</GenerateAppHost>
+<RootNamespace>TravelGuideApp</RootNamespace>
+<UseMaui>true</UseMaui>
+<SingleProject>true</SingleProject>
+<ImplicitUsings>enable</ImplicitUsings>
+<MauiVersion>8.0.14</MauiVersion>
+<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+
+<ApplicationTitle>TravelGuideApp</ApplicationTitle>
+
+<ApplicationId>com.companyname.travelguideapp</ApplicationId>
+<ApplicationIdGuid>bdc2d274-ebac-4581-ba55-91db4a3504fb</ApplicationIdGuid>
+
+<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+<ApplicationVersion>1</ApplicationVersion>
+
+<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+</PropertyGroup>
+
+<ItemGroup>
+<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+<MauiImage Include="Resources\Images\*" />
+<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+<MauiFont Include="Resources\Fonts\*" />
+<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+</ItemGroup>
+
+<ItemGroup>
+	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="$(MauiVersion)" />
+<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+    <PackageReference Include="ZXing.Net.MAUI" Version="0.4.0" />
+    <PackageReference Include="ZXing.Net.MAUI.Controls" Version="0.4.0" />
+    <PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
+</ItemGroup>
+
+<ItemGroup>
+  <Folder Include="Database\" />
+  <Folder Include="Models\" />
+  <Folder Include="Services\" />
+  <Folder Include="ViewModels\" />
+  <Folder Include="Views\" />
+</ItemGroup>
+
+<ItemGroup>
+  <Compile Remove="TravelGuideWebAdmin/**" />
+  <Content Remove="TravelGuideWebAdmin/**" />
+  <EmbeddedResource Remove="TravelGuideWebAdmin/**" />
+  <None Remove="TravelGuideWebAdmin/**" />
+</ItemGroup>
+
+</Project>

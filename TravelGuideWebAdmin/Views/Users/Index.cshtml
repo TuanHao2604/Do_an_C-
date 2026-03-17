@@ -1,0 +1,85 @@
+@model IEnumerable<TravelGuideWebAdmin.Models.User>
+
+@{
+    ViewData["Title"] = "Người dùng";
+}
+
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Hồ sơ người dùng</p>
+        <h1 class="page-title">Người dùng</h1>
+        <p class="page-subtitle">Quản lý tài khoản, vai trò và phân tầng dịch vụ.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Create">
+            <i class="bi bi-plus-circle me-2"></i>Thêm người dùng
+        </a>
+    </div>
+</section>
+
+<div class="section-card">
+<div class="table-responsive">
+<table class="table table-hover data-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PasswordHash)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <strong>@Html.DisplayFor(modelItem => item.Username)</strong>
+            </td>
+            <td>
+                <span class="text-muted">@Html.DisplayFor(modelItem => item.PasswordHash)</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tier)
+            </td>
+            <td>
+                <div class="table-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>

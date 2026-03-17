@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TravelGuideApp.ViewModels"
+             xmlns:models="clr-namespace:TravelGuideApp.Models"
+             x:Class="TravelGuideApp.Views.HomePage"
+             BackgroundColor="#F5F6F8"
+             Title="Khám phá">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <!-- Header -->
+            <Label Text="Xin chào!" FontSize="28" FontAttributes="Bold" TextColor="#111827" Margin="0,10,0,5" />
+            <Label Text="Khám phá những địa điểm thú vị gần bạn." FontSize="14" TextColor="#6B7280" Margin="0,0,0,20" />
+
+            <!-- Search Bar -->
+            <Frame HasShadow="False" CornerRadius="25" Padding="15,5" BackgroundColor="White" BorderColor="#E5E7EB" Margin="0,0,0,20">
+                <Grid ColumnDefinitions="Auto, *">
+                    <Image Source="search_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Grid.Column="0" Margin="0,0,10,0"/>
+                    <Entry Placeholder="Tìm kiếm địa điểm..." VerticalOptions="Center" Grid.Column="1" BackgroundColor="Transparent" TextColor="#374151" ClearButtonVisibility="WhileEditing"
+                           Text="{Binding SearchQuery}"/>
+                </Grid>
+            </Frame>
+
+            <Button Text="Đồng bộ dữ liệu"
+                    Command="{Binding SyncCommand}"
+                    BackgroundColor="#1D4ED8"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    Margin="0,0,0,20"/>
+
+            <!-- Main Banner -->
+            <Label Text="Khám phá Việt Nam" FontSize="20" FontAttributes="Bold" TextColor="#111827" Margin="0,0,0,15" />
+            <Frame HasShadow="True" CornerRadius="20" Padding="0" Margin="0,0,0,25" HeightRequest="200" IsClippedToBounds="True">
+                <Grid>
+                    <Image Source="halong_bay.jpg" Aspect="AspectFill" />
+                    <!-- Gradient Overlay -->
+                    <BoxView Color="#30000000" />
+                    <Label Text="Ha Long Bay" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="End" Margin="20" />
+                </Grid>
+            </Frame>
+
+            <!-- Categories -->
+            <Grid ColumnDefinitions="*, *, *, *" Margin="0,0,0,30">
+                <!-- Danh lam -->
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="8">
+                    <Frame HeightRequest="60" WidthRequest="60" CornerRadius="20" BackgroundColor="#FFEBE5" HasShadow="False" Padding="15">
+                        <Label Text="🏛" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                    <Label Text="Danh lam" FontSize="12" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                
+                <!-- Ẩm thực -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="8">
+                    <Frame HeightRequest="60" WidthRequest="60" CornerRadius="20" BackgroundColor="#FFF5E5" HasShadow="False" Padding="15">
+                        <Label Text="🍜" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                    <Label Text="Ẩm thực" FontSize="12" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                
+                <!-- Văn hóa -->
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="8">
+                    <Frame HeightRequest="60" WidthRequest="60" CornerRadius="20" BackgroundColor="#E5F3FF" HasShadow="False" Padding="15">
+                        <Label Text="🎭" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                    <Label Text="Văn hóa" FontSize="12" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                
+                <!-- Mua sắm -->
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" Spacing="8">
+                    <Frame HeightRequest="60" WidthRequest="60" CornerRadius="20" BackgroundColor="#E5FCEF" HasShadow="False" Padding="15">
+                        <Label Text="🛍" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Frame>
+                    <Label Text="Mua sắm" FontSize="12" FontAttributes="Bold" TextColor="#4B5563" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Địa điểm nổi bật -->
+            <Label Text="Địa điểm nổi bật" FontSize="20" FontAttributes="Bold" TextColor="#111827" Margin="0,0,0,15" />
+            
+            <CollectionView ItemsSource="{Binding FilteredLocations}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedPoi, Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:POI">
+                        <Frame HasShadow="False" CornerRadius="16" Padding="15" Margin="0,0,0,15" BackgroundColor="White" BorderColor="#F3F4F6">
+                            <Grid ColumnDefinitions="80, *, Auto">
+                                <!-- Place Image -->
+                                <Frame CornerRadius="12" Padding="0" Grid.Column="0" IsClippedToBounds="True" HeightRequest="80" WidthRequest="80">
+                                    <Image Source="poi_placeholder.jpg" Aspect="AspectFill" />
+                                </Frame>
+                                
+                                <!-- Info -->
+                                <VerticalStackLayout Grid.Column="1" Margin="15,0,0,0" VerticalOptions="Center" Spacing="5">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="16" TextColor="#111827" />
+                                    <Label Text="{Binding Radius, StringFormat='Bán kính {0}m'}" FontSize="12" TextColor="#6B7280" />
+                                    <!-- Badge -->
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Border BackgroundColor="#E5F3FF" StrokeThickness="0" Padding="5,2" Style="{x:Null}">
+                                            <Border.StrokeShape><RoundRectangle CornerRadius="5"/></Border.StrokeShape>
+                                            <Label Text="Dành cho bạn" FontSize="10" TextColor="#1D4ED8"/>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                
+                                <!-- Arrow -->
+                                <Label Text="›" FontSize="24" TextColor="#D1D5DB" Grid.Column="2" VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

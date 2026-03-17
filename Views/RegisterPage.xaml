@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelGuideApp.Views.RegisterPage"
+             Title="Đăng Ký">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="18" Padding="30,40">
+            <Label Text="Tạo tài khoản mới"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Label Text="Điền thông tin để bắt đầu khám phá"
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10" />
+
+            <Entry Placeholder="Tên đăng nhập"
+                   Text="{Binding Username}" />
+
+            <Entry Placeholder="Email"
+                   Keyboard="Email"
+                   Text="{Binding Email}" />
+
+            <Entry Placeholder="Số điện thoại"
+                   Keyboard="Telephone"
+                   Text="{Binding PhoneNumber}" />
+
+            <Entry Placeholder="Mật khẩu"
+                   IsPassword="True"
+                   Text="{Binding Password}" />
+
+            <Entry Placeholder="Họ và tên (tùy chọn)"
+                   Text="{Binding FullName}" />
+
+            <Button Text="Đăng Ký"
+                    Command="{Binding RegisterCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    Margin="0,10,0,0"/>
+
+            <Button Text="Đã có tài khoản? Đăng nhập"
+                    Command="{Binding BackToLoginCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

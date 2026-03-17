@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TravelGuideApp.Views.ProfilePage"
+             Title="Tài khoản">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="24,30">
+            <Label Text="Hồ sơ cá nhân" FontSize="26" FontAttributes="Bold" />
+            <Label Text="Cập nhật thông tin và xem trạng thái tài khoản" TextColor="Gray" />
+
+            <VerticalStackLayout IsVisible="{Binding IsLoggedIn}">
+                <Frame Padding="16" CornerRadius="16" BackgroundColor="#F5F6F8" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Tên đăng nhập" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Username}" IsEnabled="False" />
+
+                        <Label Text="Họ và tên"/>
+                        <Entry Text="{Binding FullName}" />
+
+                        <Label Text="Email"/>
+                        <Entry Text="{Binding Email}" Keyboard="Email"/>
+
+                        <Label Text="Số điện thoại"/>
+                        <Entry Text="{Binding PhoneNumber}" Keyboard="Telephone"/>
+
+                    <Label Text="Hạng tài khoản"/>
+                    <Entry Text="{Binding Tier}" IsEnabled="False" />
+                    
+                    <Label Text="Điểm tích lũy"/>
+                    <Entry Text="{Binding Points}" IsEnabled="False" />
+                </VerticalStackLayout>
+            </Frame>
+
+                <Button Text="Lưu thay đổi"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50" />
+
+                <Button Text="Đổi ngôn ngữ VI/EN"
+                        Command="{Binding ToggleLanguageCommand}"
+                        BackgroundColor="#EFF6FF"
+                        TextColor="#1D4ED8"
+                        CornerRadius="8"
+                        HeightRequest="44" />
+
+                <Button Text="Đăng xuất"
+                        Command="{Binding LogoutCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource Primary}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding IsLoggedIn, Converter={StaticResource InverseBoolConverter}}">
+                <Label Text="Bạn chưa đăng nhập." TextColor="Gray" />
+                <Button Text="Đi đến đăng nhập"
+                        Command="{Binding GoToLoginCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

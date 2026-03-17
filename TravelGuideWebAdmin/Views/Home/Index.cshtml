@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "Bảng điều khiển";
+}
+
+<section class="hero-grid">
+    <div class="hero-card">
+        <p class="eyebrow">TravelGuide Control</p>
+        <h1 class="hero-title">Trung tâm điều phối nội dung du lịch.</h1>
+        <p class="hero-subtitle">
+            Quản lý điểm đến, hành trình và người dùng trong cùng một không gian làm việc. Tập trung vào dữ liệu, gọn gàng và rõ ràng.
+        </p>
+        <div class="hero-actions">
+            <a asp-controller="POIs" asp-action="Index" class="btn btn-primary">
+                <i class="bi bi-geo-alt me-2"></i>Quản lý POI
+            </a>
+            <a asp-controller="Tours" asp-action="Index" class="btn btn-outline">
+                <i class="bi bi-signpost-split me-2"></i>Quản lý Tour
+            </a>
+            <a asp-controller="Users" asp-action="Index" class="btn btn-outline">
+                <i class="bi bi-people me-2"></i>Quản lý Người dùng
+            </a>
+        </div>
+    </div>
+    <div class="hero-panel">
+        <div class="metric-card">
+            <h4><i class="bi bi-pin-map me-2 text-success"></i>Tổng POI</h4>
+            <p>@(ViewBag.PoiCount ?? 0) điểm đến</p>
+        </div>
+        <div class="metric-card">
+            <h4><i class="bi bi-journal-check me-2 text-warning"></i>Tổng Tour</h4>
+            <p>@(ViewBag.TourCount ?? 0) lịch trình</p>
+        </div>
+        <div class="metric-card">
+            <h4><i class="bi bi-people me-2 text-primary"></i>Tổng Người dùng</h4>
+            <p>@(ViewBag.UserCount ?? 0) tài khoản</p>
+        </div>
+        <div class="metric-card">
+            <h4><i class="bi bi-link-45deg me-2 text-muted"></i>Liên kết Tour-POI</h4>
+            <p>@(ViewBag.TourPoiCount ?? 0) liên kết</p>
+        </div>
+    </div>
+</section>
+
+<section class="action-grid">
+    <a class="action-card" asp-controller="POIs" asp-action="Create">
+        <h3><i class="bi bi-plus-circle me-2"></i>Thêm POI mới</h3>
+        <span>Tạo điểm đến, định vị GPS và mô tả nổi bật.</span>
+    </a>
+    <a class="action-card" asp-controller="Tours" asp-action="Create">
+        <h3><i class="bi bi-route me-2"></i>Thiết kế tour</h3>
+        <span>Xây dựng hành trình có tuyến đường và thời lượng.</span>
+    </a>
+    <a class="action-card" asp-controller="Users" asp-action="Index">
+        <h3><i class="bi bi-person-gear me-2"></i>Quản lý tài khoản</h3>
+        <span>Kiểm soát nhóm khách và đặc quyền VIP.</span>
+    </a>
+</section>

@@ -1,0 +1,80 @@
+@model IEnumerable<TravelGuideWebAdmin.Models.POI>
+
+@{
+    ViewData["Title"] = "Điểm đến (POI)";
+}
+
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Dữ liệu điểm đến</p>
+        <h1 class="page-title">Điểm đến (POI)</h1>
+        <p class="page-subtitle">Theo dõi vị trí, bán kính kích hoạt và mức độ ưu tiên hiển thị.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Create">
+            <i class="bi bi-plus-circle me-2"></i>Thêm POI
+        </a>
+    </div>
+</section>
+
+<div class="section-card">
+<div class="table-responsive">
+<table class="table table-hover data-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Radius)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Priority)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+            </td>
+            <td>
+                <span class="text-muted">@Html.DisplayFor(modelItem => item.Description)</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Radius)
+            </td>
+            <td>
+                <span class="badge-pill">Mức @Html.DisplayFor(modelItem => item.Priority)</span>
+            </td>
+            <td>
+                <div class="table-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                    <a asp-action="Qr" asp-route-id="@item.Id">QR</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:TravelGuideApp.Models"
+             x:Class="TravelGuideApp.Views.TourReviewPage"
+             Title="Đánh giá tour"
+             BackgroundColor="#F5F6F8">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Đánh giá của bạn" FontSize="18" FontAttributes="Bold" />
+
+            <Entry Placeholder="Số sao (1-5)" Keyboard="Numeric" Text="{Binding Rating}" />
+            <Editor Placeholder="Bình luận" AutoSize="TextChanges" Text="{Binding Comment}" />
+            <Button Text="Gửi đánh giá"
+                    Command="{Binding SubmitCommand}"
+                    BackgroundColor="#1D4ED8"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="45"/>
+
+            <Label Text="Đánh giá gần đây" FontSize="18" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding Reviews}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Review">
+                        <Frame CornerRadius="12" Padding="12" Margin="0,0,0,10" BackgroundColor="White" BorderColor="#F3F4F6" HasShadow="False">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Rating, StringFormat='⭐ {0}/5'}" FontAttributes="Bold" />
+                                <Label Text="{Binding Comment}" FontSize="12" TextColor="#6B7280" />
+                                <Label Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="10" TextColor="#9CA3AF" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
