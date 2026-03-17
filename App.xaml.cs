@@ -25,6 +25,6 @@ public partial class App : Application
 			}
 		});
 
-			// Notification permission request can be handled by platform-specific code if needed.
+			// Notification permission request can be ha~~ndled by platform-specific code if needed.
 	}
 }

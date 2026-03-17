@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "travelguide-secret-key-change";
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "TravelGuideWebAdmin";
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Jwt:Key is not configured. Set it in appsettings or environment variables.");
+var jwtIssuer   = builder.Configuration["Jwt:Issuer"]   ?? "TravelGuideWebAdmin";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "TravelGuideMobileApp";
 
 builder.Services.AddAuthentication(options =>
@@ -45,32 +46,13 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<TravelGuideWebAdmin.Data.TravelGuideContext>();
+    // EnsureCreated tạo tất cả bảng từ DbSet (User_POI_Logs, POI_Images, POI_Medias, v.v.)
+    // Không dùng raw SQL để tạo bảng nữa — EF Core quản lý schema
     db.Database.EnsureCreated();
     EnsureAdminUser(db, app.Configuration);
-    db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS User_POI_Logs (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Username TEXT,
-        PoiId INTEGER NOT NULL,
-        StartTime TEXT NOT NULL,
-        EndTime TEXT NOT NULL,
-        TriggerType TEXT
-    );");
-    db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS POI_Images (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        PoiId INTEGER NOT NULL,
-        ImageUrl TEXT,
-        Caption TEXT
-    );");
-    db.Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS POI_Medias (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        PoiId INTEGER NOT NULL,
-        Type TEXT,
-        AudioUrl TEXT,
-        TtsScript TEXT,
-        Language TEXT
-    );");
 
-    EnsureColumn(db, "POIs", "DescriptionEn", "TEXT");
+    // Migrate các cột mới thêm vào (backward compatibility)
+    EnsureColumn(db, "POIs",  "DescriptionEn", "TEXT");
     EnsureColumn(db, "Tours", "DescriptionEn", "TEXT");
 }
 
@@ -99,6 +81,18 @@ app.Run();
 
 static void EnsureColumn(TravelGuideWebAdmin.Data.TravelGuideContext db, string table, string column, string type)
 {
+    // Whitelist để tránh SQL Injection nếu tham số được truyền từ nguồn động
+    var allowedTables  = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "POIs", "Tours", "Users", "Tour_POIs", "User_POI_Logs", "POI_Images", "POI_Medias" };
+    var allowedColumns = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "DescriptionEn", "Points", "Tier", "PhoneNumber" };
+    var allowedTypes   = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "TEXT", "INTEGER", "REAL", "BLOB" };
+
+    if (!allowedTables.Contains(table))
+        throw new ArgumentException($"Table '{table}' is not in the allowed list.", nameof(table));
+    if (!allowedColumns.Contains(column))
+        throw new ArgumentException($"Column '{column}' is not in the allowed list.", nameof(column));
+    if (!allowedTypes.Contains(type))
+        throw new ArgumentException($"Type '{type}' is not in the allowed list.", nameof(type));
+
     using var conn = db.Database.GetDbConnection();
     conn.Open();
     using var cmd = conn.CreateCommand();

@@ -92,18 +92,17 @@ namespace TravelGuideApp.Database
             if (mappings.Count == 0)
                 return new List<POI>();
 
-            var allPois = await _database.Table<POI>().ToListAsync();
-            var map = allPois.ToDictionary(p => p.Id, p => p);
+            // Only fetch the specific POI IDs needed — avoids full-table scan
+            var poiIds = mappings.Select(m => m.PoiId).ToHashSet();
+            var pois   = await _database.Table<POI>()
+                .Where(p => poiIds.Contains(p.Id))
+                .ToListAsync();
 
-            var result = new List<POI>();
-            foreach (var item in mappings)
-            {
-                if (map.TryGetValue(item.PoiId, out var poi))
-                {
-                    result.Add(poi);
-                }
-            }
-            return result;
+            var map = pois.ToDictionary(p => p.Id, p => p);
+            return mappings
+                .Where(m => map.ContainsKey(m.PoiId))
+                .Select(m => map[m.PoiId])
+                .ToList();
         }
 
         public async Task<List<POI_Image>> GetPoiImagesAsync(int poiId)
@@ -162,15 +161,11 @@ namespace TravelGuideApp.Database
             if (favs.Count == 0)
                 return new List<POI>();
 
-            var allPois = await _database.Table<POI>().ToListAsync();
-            var map = allPois.ToDictionary(p => p.Id, p => p);
-            var result = new List<POI>();
-            foreach (var fav in favs)
-            {
-                if (map.TryGetValue(fav.PoiId, out var poi))
-                    result.Add(poi);
-            }
-            return result;
+            // Only fetch the specific POI IDs needed — avoids full-table scan
+            var poiIds = favs.Select(f => f.PoiId).ToHashSet();
+            return await _database.Table<POI>()
+                .Where(p => poiIds.Contains(p.Id))
+                .ToListAsync();
         }
 
         public async Task<bool> IsTourFavoriteAsync(int userId, int tourId)
@@ -213,15 +208,11 @@ namespace TravelGuideApp.Database
             if (favs.Count == 0)
                 return new List<Tour>();
 
-            var allTours = await _database.Table<Tour>().ToListAsync();
-            var map = allTours.ToDictionary(t => t.Id, t => t);
-            var result = new List<Tour>();
-            foreach (var fav in favs)
-            {
-                if (map.TryGetValue(fav.TourId, out var tour))
-                    result.Add(tour);
-            }
-            return result;
+            // Only fetch the specific Tour IDs needed — avoids full-table scan
+            var tourIds = favs.Select(f => f.TourId).ToHashSet();
+            return await _database.Table<Tour>()
+                .Where(t => tourIds.Contains(t.Id))
+                .ToListAsync();
         }
 
         public async Task<int> AddReviewAsync(Review review)

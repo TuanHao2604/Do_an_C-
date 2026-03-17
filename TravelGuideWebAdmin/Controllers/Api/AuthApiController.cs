@@ -21,15 +21,23 @@ namespace TravelGuideWebAdmin.Controllers.Api
         [HttpPost("token")]
         public IActionResult Token([FromBody] ApiAuthRequest request)
         {
-            var clientId = _config["Api:ClientId"] ?? "travelguide-app";
-            var clientSecret = _config["Api:ClientSecret"] ?? "change-me";
+            var clientId     = _config["Api:ClientId"];
+            var clientSecret = _config["Api:ClientSecret"];
+            var key          = _config["Jwt:Key"];
+            var issuer       = _config["Jwt:Issuer"]   ?? "TravelGuideWebAdmin";
+            var audience     = _config["Jwt:Audience"] ?? "TravelGuideMobileApp";
+
+            // Từ chối phục vụ nếu config chưa được thiết lập đúng
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(clientSecret))
+                return StatusCode(500, "Server configuration error.");
 
             if (request == null || request.ClientId != clientId || request.ClientSecret != clientSecret)
                 return Unauthorized();
 
-            var key = _config["Jwt:Key"] ?? "travelguide-secret-key-change";
-            var issuer = _config["Jwt:Issuer"] ?? "TravelGuideWebAdmin";
-            var audience = _config["Jwt:Audience"] ?? "TravelGuideMobileApp";
+            if (key.Length < 32)
+                return StatusCode(500, "JWT key is too short (minimum 32 characters).");
+
+            var expiryDays = _config.GetValue<int>("Jwt:TokenExpiryDays", 1);
 
             var claims = new[]
             {
@@ -37,8 +45,11 @@ namespace TravelGuideWebAdmin.Controllers.Api
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddDays(7);
+            var creds = new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                SecurityAlgorithms.HmacSha256);
+
+            var expires = DateTime.UtcNow.AddDays(expiryDays);
 
             var token = new JwtSecurityToken(
                 issuer: issuer,

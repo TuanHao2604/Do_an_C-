@@ -41,18 +41,10 @@ namespace TravelGuideWebAdmin.Controllers
                 return View(model);
             }
 
-            var valid = false;
-            if (!string.IsNullOrWhiteSpace(user.PasswordHash) && user.PasswordHash.StartsWith("pbkdf2$"))
-            {
-                valid = PasswordHasher.Verify(model.Password, user.PasswordHash);
-            }
-            else if (user.PasswordHash == model.Password)
-            {
-                valid = true;
-                user.PasswordHash = PasswordHasher.Hash(model.Password);
-                _context.Update(user);
-                await _context.SaveChangesAsync();
-            }
+            // Chỉ chấp nhận mật khẩu đã được hash bằng PBKDF2
+            var valid = !string.IsNullOrWhiteSpace(user.PasswordHash)
+                        && user.PasswordHash.StartsWith("pbkdf2$")
+                        && PasswordHasher.Verify(model.Password, user.PasswordHash);
 
             if (!valid)
             {
